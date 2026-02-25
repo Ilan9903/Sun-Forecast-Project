@@ -1,0 +1,164 @@
+--- PAGE 1 ---
+ 
+ 
+Projet React Sun Forecast 
+ 
+ 
+Énoncé 
+ 
+La Start-up Sun Forecast propose d’améliorer la production d’énergie photovoltaïque des particuliers 
+et des entreprises en leur fournissant des prévisions météorologiques sur 5 jours. 
+Vous avez été embauché pour vos compétences en développement Full Stack afin de développer la 
+première version de leur application Web de Météo. 
+ 
+Vous utiliserez le Framework React pour développer le Front de l’application Web. 
+ 
+Vous utiliserez une API de Météo fourni par OpenWeather : 
+https://openweathermap.org/api.  
+ 
+Page d’accueil de l’application Web : 
+ 
+ 
+ 
+La page d’accueil récupère la géolocalisation et affichera la météo suivant cette localisation. Elle 
+affichera ensuite la météo suivant la ville renseignée dans la barre de recherche. 
+ 
+ 
+ 
+
+--- PAGE 2 ---
+La page Maps affichera les cartes permettant de connaitre pour aujourd’hui les prévisions de pluie, 
+de température et de vent : 
+ 
+ 
+ 
+  
+ 
+Création du projet 
+ 
+1. Créer le projet Vite React 
+ 
+npm create vite@latest sun-forecast 
+cd sun-forecast 
+npm install 
+ 
+2. Installer les dépendances React (router + animations + icônes) 
+ 
+npm install react-router-dom framer-motion lucide-react 
+ 
+3. Installer Tailwind v4 (avec plugin Vite) 
+ 
+npm install tailwindcss @tailwindcss/vite 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 3 ---
+4. Configurer vite.config.js (Tailwind + alias @) 
+À la racine : vite.config.js 
+ 
+import { defineConfig } from "vite"; 
+import react from "@vitejs/plugin-react"; 
+import tailwindcss from "@tailwindcss/vite"; 
+import path from "path"; 
+ 
+export default defineConfig({ 
+  plugins: [react(), tailwindcss()], 
+  resolve: { 
+    alias: { 
+      "@": path.resolve(__dirname, "./src"), 
+    }, 
+  }, 
+}); 
+ 
+5. Créer jsconfig.json (pour que shadcn détecte l’alias) 
+ 
+À la racine : jsconfig.json 
+ 
+{ 
+  "compilerOptions": { 
+    "baseUrl": ".", 
+    "paths": { 
+      "@/*": ["src/*"] 
+    } 
+  } 
+} 
+ 
+6. Activer Tailwind dans le CSS 
+ 
+ 
+@import "tailwindcss"; 
+ 
+html, body, #root { 
+  height: 100%; 
+} 
+ 
+7. Initialiser shadcn/ui (base color = Slate) 
+ 
+npx shadcn@latest init 
+ 
+8. Ajouter les composants shadcn utilisés par le design 
+ 
+npx shadcn@latest add card 
+npx shadcn@latest add button 
+npx shadcn@latest add tabs 
+ 
+ 
+--- PAGE 4 ---
+Ça va créer : 
+ 
+• src/components/ui/card.* 
+• src/components/ui/button.* 
+• src/components/ui/tabs.* 
+• src/lib/utils.js 
+ 
+9. Lancer le projet 
+ 
+npm run dev 
+ 
+ 
+Rendu demandé 
+ 
+1. Un fichier compressé ou un lien git du projet du  site internet. 
+ 
+ 
+API de Météo 
+ 
+Vous utiliserez l’API OpenWeather https://openweathermap.org/api/one-call-3 qui permet de 
+connaître le temps qu’il fait n’importe où dans le monde. OpenWeather fournit également une API 
+pour la géolocalisation. 
+ 
+Pour utiliser l'API OpenWeather, une clé est nécessaire, cette clé est : 
+d6def4924ad5f9a9b59f3ae895b234cb 
+ 
+• Vous utiliserez la fonctionnalité https://openweathermap.org/forecast5 qui permettra de 
+connaître le temps sur 5 jours. 
+Exemple : 
+https://api.openweathermap.org/data/2.5/forecast?lat=45.7578137&lon=4.8320114&lang=f
+r&units=metric&appid=d6def4924ad5f9a9b59f3ae895b234cb  
+• Vous utiliserez les icônes https://openweathermap.org/weather-conditions pour afficher une 
+image du temps qu’il fait.  
+Exemple : 
+https://openweathermap.org/img/wn/10d@2x.png  
+• Vous utiliserez https://openweathermap.org/api/geocoding-api pour géolocaliser une ville. 
+Exemple : 
+https://api.openweathermap.org/geo/1.0/direct?q=Lyon,fr&limit=1&appid=d6def4924ad5f9
+a9b59f3ae895b234cb 
+ 
+L’API pour les prévisions de pluie, de température et de vent est disponible ici : 
+https://openweathermap.org/api/weathermaps. 
+ 
+Exemple d’utilisation pour les prévisions de pluie : 
+• URL : 
+https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=d6def49
+24ad5f9a9b59f3ae895b234cb  
+• {z} : Niveau de zoom (par exemple, 8). 
+• {x} et {y} : Coordonnées de la carte. 
+ 
+ 
+--- PAGE 5 ---
+ 
