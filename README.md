@@ -1,6 +1,7 @@
 # Sun Forecast Project
 
-Application météo React réalisée dans le cadre du TP **Sun Forecast**.
+Application météo React réalisée dans le cadre du TP `TP_Projet_React_Sun_Forecast_extrait.txt`
+}.
 
 ## Objectif
 
