@@ -76,10 +76,10 @@ npm run lint
 
 ## Structure principale
 
-- `src/pages/HomePage.jsx`
-- `src/pages/MapsPage.jsx`
-- `src/services/openWeather.js`
-- `src/components/ui/*`
+- [HomePage](https://github.com/Ilan9903/Sun-Forecast-Project/blob/main/src/pages/HomePage.jsx)
+- [MapsPage](https://github.com/Ilan9903/Sun-Forecast-Project/blob/main/src/pages/MapsPage.jsx)
+- [openWeather](https://github.com/Ilan9903/Sun-Forecast-Project/blob/main/src/services/openWeather.js)
+- [UI Components](https://github.com/Ilan9903/Sun-Forecast-Project/blob/main/src/components/ui)
 
 ## Rendu
 
