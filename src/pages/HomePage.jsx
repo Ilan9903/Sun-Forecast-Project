@@ -46,6 +46,7 @@ function getDailyForecasts(forecast) {
         maxTemp,
         icon: mainEntry.weather[0].icon,
         description: mainEntry.weather[0].description,
+        entries,
       }
     })
 }
@@ -56,9 +57,18 @@ export default function HomePage() {
   const [forecast, setForecast] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [selectedDayKey, setSelectedDayKey] = useState('')
 
   const currentWeather = useMemo(() => getCurrentWeather(forecast), [forecast])
   const dailyForecasts = useMemo(() => getDailyForecasts(forecast), [forecast])
+  const selectedDayForecast = useMemo(() => {
+    if (!dailyForecasts.length) {
+      return null
+    }
+
+    const foundDay = dailyForecasts.find((day) => day.dayKey === selectedDayKey)
+    return foundDay || dailyForecasts[0]
+  }, [dailyForecasts, selectedDayKey])
 
   async function loadForecastByCoords(lat, lon, label) {
     setLoading(true)
@@ -68,6 +78,10 @@ export default function HomePage() {
       const data = await getForecastByCoords(lat, lon)
       setForecast(data)
       setCityLabel(label || data.city?.name || 'Position actuelle')
+      const firstDayKey = data?.list?.[0]
+        ? new Date(data.list[0].dt * 1000).toISOString().split('T')[0]
+        : ''
+      setSelectedDayKey(firstDayKey)
     } catch (fetchError) {
       setError(fetchError.message || 'Impossible de récupérer la météo')
     } finally {
@@ -131,8 +145,8 @@ export default function HomePage() {
           placeholder="Rechercher une ville"
           className="h-10 flex-1 rounded-md border px-3"
         />
-        <Button type="submit">Rechercher</Button>
-        <Button type="button" variant="outline" onClick={handleMyPosition}>
+        <Button type="submit" className="hover:cursor-pointer">Rechercher</Button>
+        <Button type="button" variant="outline" onClick={handleMyPosition} className="hover:cursor-pointer">
           Ma position
         </Button>
       </form>
@@ -165,13 +179,22 @@ export default function HomePage() {
       )}
 
       {dailyForecasts.length > 0 && (
-        <Card>
+        <Card className="space-y-4">
           <CardHeader>
             <CardTitle>Prévisions 5 jours</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {dailyForecasts.map((day) => (
-              <div key={day.dayKey} className="rounded-md border p-3 text-center">
+              <button
+                type="button"
+                key={day.dayKey}
+                onClick={() => setSelectedDayKey(day.dayKey)}
+                className={`rounded-md border p-3 text-center hover:cursor-pointer transition ${
+                  selectedDayForecast?.dayKey === day.dayKey
+                    ? 'border-slate-900 bg-slate-100'
+                    : 'hover:bg-slate-50'
+                }`}
+              >
                 <p className="mb-2 text-sm font-medium capitalize">{day.label}</p>
                 <img
                   src={getWeatherIconUrl(day.icon)}
@@ -182,9 +205,33 @@ export default function HomePage() {
                 <p className="mt-1 font-semibold">
                   {Math.round(day.maxTemp)}° / {Math.round(day.minTemp)}°
                 </p>
-              </div>
+              </button>
             ))}
           </CardContent>
+
+          {selectedDayForecast && (
+            <CardContent className="pt-0">
+              <div className="rounded-md border p-4">
+                <p className="mb-3 text-sm font-semibold capitalize">
+                  Heures disponibles - {selectedDayForecast.label}
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                  {selectedDayForecast.entries.map((entry) => (
+                    <div key={entry.dt} className="rounded-md border p-2 text-sm">
+                      <p className="font-medium">
+                        {new Date(entry.dt * 1000).toLocaleTimeString('fr-FR', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                      <p className="capitalize text-muted-foreground">{entry.weather[0].description}</p>
+                      <p className="font-semibold">{Math.round(entry.main.temp)}°C</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          )}
         </Card>
       )}
     </main>
