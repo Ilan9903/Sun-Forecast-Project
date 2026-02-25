@@ -9,6 +9,7 @@ import {
   geocodeCity,
   getBrowserPosition,
   getWeatherTileTemplateUrl,
+  hasOpenWeatherApiKey,
 } from '@/services/openWeather'
 
 const TILE_LAYERS = {
@@ -45,12 +46,16 @@ export default function MapsPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [activeLayer, setActiveLayer] = useState('rain')
+  const hasApiKey = hasOpenWeatherApiKey()
 
   const activeLayerConfig = useMemo(() => TILE_LAYERS[activeLayer], [activeLayer])
-  const weatherLayerUrl = useMemo(
-    () => getWeatherTileTemplateUrl(activeLayerConfig.key),
-    [activeLayerConfig]
-  )
+  const weatherLayerUrl = useMemo(() => {
+    if (!hasApiKey) {
+      return ''
+    }
+
+    return getWeatherTileTemplateUrl(activeLayerConfig.key)
+  }, [activeLayerConfig, hasApiKey])
 
   async function handleSearch(event) {
     event.preventDefault()
@@ -142,6 +147,12 @@ export default function MapsPage() {
 
       {error && <p className="text-red-500">{error}</p>}
 
+      {!hasApiKey && (
+        <p className="text-red-500">
+          Clé API manquante: ajoute VITE_OPENWEATHER_API_KEY dans .env puis redémarre l'app.
+        </p>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle>{locationLabel}</CardTitle>
@@ -169,7 +180,7 @@ export default function MapsPage() {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <TileLayer url={weatherLayerUrl} opacity={0.75} />
+              {hasApiKey && <TileLayer url={weatherLayerUrl} opacity={0.75} />}
               <Marker position={[coords.lat, coords.lon]} icon={markerIcon}>
                 <Popup>
                   {locationLabel} <br /> {coords.lat.toFixed(4)}, {coords.lon.toFixed(4)}

@@ -20,14 +20,33 @@ Application météo React réalisée dans le cadre du [TP_Projet_React_Sun_Forec
 - Leaflet / React Leaflet
 - OpenWeather API
 
-## API utilisée
+## API utilisée (conforme au TP)
 
 - Forecast 5 jours: `https://api.openweathermap.org/data/2.5/forecast`
 - Geocoding: `https://api.openweathermap.org/geo/1.0/direct`
 - Icônes météo: `https://openweathermap.org/img/wn/{icon}@2x.png`
 - Tuiles météo: `https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png`
 
-Clé API utilisée dans le projet: celle fournie par l’énoncé.
+Le projet utilise la variable d’environnement `VITE_OPENWEATHER_API_KEY`.
+
+## Configuration de la clé API
+
+### En local
+
+1. Duplique le fichier `.env.example` en `.env`.
+2. Renseigne ta clé OpenWeather:
+
+```bash
+VITE_OPENWEATHER_API_KEY=ta_cle_openweather
+```
+
+3. Redémarre le serveur Vite si nécessaire.
+
+### Pour GitHub (autres utilisateurs)
+
+- Le repo contient `.env.example` (sans clé réelle).
+- Chaque utilisateur copie `.env.example` vers `.env` et renseigne sa propre clé.
+- Le fichier `.env` est ignoré par Git (sécurité).
 
 ## Installation
 
