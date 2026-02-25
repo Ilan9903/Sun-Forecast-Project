@@ -34,6 +34,11 @@ Le projet utilise la variable d’environnement `VITE_OPENWEATHER_API_KEY`.
 ### En local
 
 1. Duplique le fichier `.env.example` en `.env`.
+
+```bash
+cp -a .env.example .env
+```
+
 2. Renseigne ta clé OpenWeather:
 
 ```bash
